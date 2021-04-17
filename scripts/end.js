@@ -2,6 +2,7 @@ const username = document.getElementById('username');
 const saveScoreBtn = document.getElementById('saveScoreBtn');
 const finalScore = document.getElementById('finalScore');
 const mostRecentScore = localStorage.getItem('mostRecentScore');
+const category = localStorage.getItem('tempCategory');
 
 const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
@@ -17,6 +18,7 @@ saveHighScore = (e) => {
     e.preventDefault();
 
     const score = {
+        category: category,
         score: mostRecentScore,
         name: username.value,
     };

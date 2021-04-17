@@ -67,7 +67,8 @@ selectCategory = () => {
         categoryBody.classList.add('btn');
         categoryBody.textContent = category;
         categoryBody.setAttribute('href', '/game.html');
-        categoryHome.append(categoryBody)
+        categoryBody.addEventListener('click', () => localStorage.setItem('tempCategory', category));
+        categoryHome.append(categoryBody);
     });
     categoryHome.classList.remove('hidden');
     loader.classList.add('hidden');
@@ -77,6 +78,12 @@ getCategories = () => {
     availableCategories = [...questions].map(question => question.category).filter(onlyUnique);
     // console.log(questions);
 };
+
+categoryHandler = () => {
+
+    // console.log(questions);
+};
+
 
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;

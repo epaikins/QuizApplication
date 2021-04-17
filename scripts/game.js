@@ -10,6 +10,7 @@ let acceptingAnswers = false;
 let score = 0;
 let questionCounter = 0;
 let availableQuesions = [];
+let newQuestions = [];
 
 
 
@@ -22,7 +23,6 @@ fetch(
         return res.json();
     })
     .then((loadedQuestions) => {
-        console.log(loadedQuestions);
         questions = loadedQuestions.results.map((loadedQuestion) => {
             const formattedQuestion = {
                 question: loadedQuestion.question,
@@ -67,22 +67,30 @@ startGame = () => {
     loader.classList.add('hidden');
 };
 
-
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) !== undefined;
+}
 
 getNewQuestion = () => {
-    if (availableQuesions.length === 0 || questionCounter >= MAX_QUESTIONS) {
+    let tempCategory = localStorage.getItem('tempCategory');
+    newQuestions = availableQuesions.filter((question) => question.category === tempCategory);
+
+    if (newQuestions.length === 0 || questionCounter >= MAX_QUESTIONS) {
         localStorage.setItem('mostRecentScore', score);
         //go to the end page
         return window.location.assign('/end.html');
     }
-    console.log(availableQuesions);
+
+
     questionCounter++;
     progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
     //Update the progress bar
     progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
 
-    const questionIndex = Math.floor(Math.random() * availableQuesions.length);
-    currentQuestion = availableQuesions[questionIndex];
+    const questionIndex = Math.floor(Math.random() * newQuestions.length);
+    currentQuestion = newQuestions[questionIndex];
+
+    // console.log(currentQuestion);
     question.innerHTML = currentQuestion.question;
 
     choices.forEach((choice) => {
@@ -90,8 +98,9 @@ getNewQuestion = () => {
         choice.innerHTML = currentQuestion['choice' + number];
     });
 
-    availableQuesions.splice(questionIndex, 1);
     acceptingAnswers = true;
+    console.log(newQuestions);
+    newQuestions.splice(questionIndex, 1);
 };
 
 choices.forEach((choice) => {
