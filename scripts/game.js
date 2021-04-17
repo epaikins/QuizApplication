@@ -11,21 +11,26 @@ let score = 0;
 let questionCounter = 0;
 let availableQuesions = [];
 
+
+
 let questions = [];
 
 fetch(
-        'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple'
+        'https://opentdb.com/api.php?amount=50'
     )
     .then((res) => {
         return res.json();
     })
     .then((loadedQuestions) => {
+        console.log(loadedQuestions);
         questions = loadedQuestions.results.map((loadedQuestion) => {
             const formattedQuestion = {
                 question: loadedQuestion.question,
             };
 
             const answerChoices = [...loadedQuestion.incorrect_answers];
+            formattedQuestion.category = loadedQuestion.category;
+
             formattedQuestion.answer = Math.floor(Math.random() * 4) + 1;
             answerChoices.splice(
                 formattedQuestion.answer - 1,
@@ -40,6 +45,8 @@ fetch(
             return formattedQuestion;
         });
 
+        // selectCategory();
+
         startGame();
     })
     .catch((err) => {
@@ -50,6 +57,7 @@ fetch(
 const CORRECT_BONUS = 10;
 const MAX_QUESTIONS = 3;
 
+
 startGame = () => {
     questionCounter = 0;
     score = 0;
@@ -59,12 +67,15 @@ startGame = () => {
     loader.classList.add('hidden');
 };
 
+
+
 getNewQuestion = () => {
     if (availableQuesions.length === 0 || questionCounter >= MAX_QUESTIONS) {
         localStorage.setItem('mostRecentScore', score);
         //go to the end page
         return window.location.assign('/end.html');
     }
+    console.log(availableQuesions);
     questionCounter++;
     progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
     //Update the progress bar

@@ -125,3 +125,13 @@ input {
 input::placeholder {
   color: #aaa;
 }
+
+#categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#categories a {
+  margin: 10px;
+  padding: 10px;
+}
