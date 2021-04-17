@@ -2,12 +2,15 @@ const highScoresList = document.getElementById("highScoresList");
 const listCategory = document.getElementById("listCategory");
 const category = document.querySelector("select").value;
 const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+// console.log(highScores[0].category);
+
+categoriesHighScores = highScores.map(score => score.category).filter(onlyUniqueCategory);
 
 // console.log(category);
 
-listCategory.innerHTML = `<option value="Select" selected="selected">Select Category</option>` + highScores
-    .map(score => {
-        return `<option value="${score.category}">${score.category}</option>`;
+listCategory.innerHTML = `<option value="Select" selected="selected">Select Category</option>` +
+    categoriesHighScores.map(category => {
+        return `<option value="${category}">${category}</option>`;
     })
     .join("");
 
@@ -23,4 +26,9 @@ function selector() {
             }
         })
         .join("");
+}
+
+
+function onlyUniqueCategory(value, index, self) {
+    return self.indexOf(value) === index;
 }

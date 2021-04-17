@@ -12,7 +12,10 @@ let questionCounter = 0;
 let availableQuesions = [];
 let newQuestions = [];
 
+let categoryHome = document.querySelector('#categories');
+let categoryMain = document.querySelector('.categoryMain');
 
+let availableCategories = [];
 
 let questions = [];
 
@@ -24,6 +27,11 @@ fetch(
     })
     .then((loadedQuestions) => {
         questions = loadedQuestions.results.map((loadedQuestion) => {
+
+            const category = {
+                category: loadedQuestion.category,
+            };;
+
             const formattedQuestion = {
                 question: loadedQuestion.question,
             };
@@ -45,9 +53,8 @@ fetch(
             return formattedQuestion;
         });
 
-        // selectCategory();
+        selectCategory();
 
-        startGame();
     })
     .catch((err) => {
         console.error(err);
@@ -58,13 +65,46 @@ const CORRECT_BONUS = 10;
 const MAX_QUESTIONS = 3;
 
 
+selectCategory = () => {
+    getCategories();
+
+    availableCategories.forEach((category) => {
+        let categoryBody = document.createElement('a');
+        categoryBody.classList.add('btn');
+        categoryBody.textContent = category;
+        // categoryBody.setAttribute('href', '/game.html');
+        categoryBody.addEventListener('click', () => {
+            localStorage.setItem('tempCategory', category);
+            startGame();
+        });
+        categoryHome.append(categoryBody);
+    });
+    categoryHome.classList.remove('hidden');
+    loader.classList.add('hidden');
+};
+
+getCategories = () => {
+    availableCategories = [...questions].map(question => question.category).filter(onlyUniqueCategory);
+};
+
+
+
+function onlyUniqueCategory(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
+
+
+
 startGame = () => {
+    categoryMain.classList.add('hidden');
     questionCounter = 0;
     score = 0;
     availableQuesions = [...questions];
     getNewQuestion();
     game.classList.remove('hidden');
     loader.classList.add('hidden');
+
 };
 
 function onlyUnique(value, index, self) {

@@ -12,3 +12,17 @@
 .high-score:hover {
   transform: scale(1.025);
 }
+
+select {
+  padding: 15px;
+  font-size: 30px;
+  width: 500px;
+  margin-bottom: 30px;
+  border: 1px solid #56a5eb;
+  color: #56a5eb;
+}
+
+select:focus {
+  border: 1px solid #56a5eb;
+  outline: none;
+}
